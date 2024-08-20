@@ -6,3 +6,9 @@ create table if not exists tb_mycrypto_users (
     updated_at datetime,
     primary key (id)
 );
+
+create table if not exists tb_mycrypto_scripts (
+    id bigint not null auto_increment,
+    clicks int,
+    screen_time int
+);
