@@ -1,6 +1,7 @@
 package br.com.fiap.apimycrypto.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,12 +11,16 @@ public class UserService {
 
     @Autowired
     UserRepository repository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<User> findAll() {
         return repository.findAll();
     }
 
     public User created(User user) {
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repository.save(user);
     }
 }

@@ -17,6 +17,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -25,8 +26,9 @@ public class AuthService {
     public Token login(Credentials credentials) {
         var user = userRepository.findByEmail(credentials.email())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        if(!passwordEncoder.matches(credentials.password(), user.getPassword())) {
-            throw new RuntimeException("Wrong password");
+
+        if (!passwordEncoder.matches(credentials.password(), user.getPassword())) {
+            throw new RuntimeException("Wrong password: " + user.getPassword() + credentials.password());
         }
         Algorithm algorithm = Algorithm.HMAC256("assinatura");
         var expiresAt = LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.ofHours(-3));
